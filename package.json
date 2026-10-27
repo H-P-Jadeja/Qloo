@@ -7,7 +7,7 @@
         "build": "prisma generate && next build",
         "start": "next start",
         "db:push": "prisma db push",
-        "test": "node --test tests/",
+        "test": "node --test 'tests/**/*.test.mjs'",
         "qloo:test": "node --env-file=.env scripts/qloo-test.mjs"
     },
     "dependencies": {

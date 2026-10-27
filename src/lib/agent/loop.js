@@ -4,7 +4,24 @@ import { SYSTEM, LLM_ONLY } from './prompts';
 import { PlanSchema } from './schema';
 import { SECTIONS } from '@/lib/qloo/types';
 
-const parse = s => JSON.parse(String(s).replace(/```json|```/g, '').trim());
+export const parse = s => {
+  const str = String(s).replace(/```json|```/g, '').trim();
+  try {
+    return JSON.parse(str);
+  } catch (e) {
+    const firstBrace = str.indexOf('{');
+    const lastBrace = str.lastIndexOf('}');
+    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+      return JSON.parse(str.slice(firstBrace, lastBrace + 1));
+    }
+    const firstBracket = str.indexOf('[');
+    const lastBracket = str.lastIndexOf(']');
+    if (firstBracket !== -1 && lastBracket !== -1 && lastBracket > firstBracket) {
+      return JSON.parse(str.slice(firstBracket, lastBracket + 1));
+    }
+    throw e;
+  }
+};
 
 // Every pick is rebuilt from a Qloo result; anything the LLM invents is dropped.
 function finalize(plan, seen) {
@@ -53,6 +70,30 @@ export async function runAgent({ entities, destination, onStep = () => { } }) {
 }
 
 export async function llmOnly({ entities, destination }) {
-  if (!llmEnabled()) return null;
-  try { const m = await chat([{ role: 'system', content: LLM_ONLY }, { role: 'user', content: JSON.stringify({ destination, loves: entities.map(e => e.name) }) }]); return parse(m.content); } catch { return null; }
+  if (!llmEnabled()) {
+    console.warn('[llmOnly] LLM is disabled (no LLM_API_KEY)');
+    return null;
+  }
+  try {
+    const m = await chat([
+      { role: 'system', content: LLM_ONLY },
+      { role: 'user', content: JSON.stringify({ destination, loves: (entities || []).map(e => e.name) }) }
+    ]);
+    const parsed = parse(m.content);
+    if (Array.isArray(parsed)) {
+      return { items: parsed };
+    }
+    if (parsed && Array.isArray(parsed.items)) {
+      return parsed;
+    }
+    if (parsed && typeof parsed === 'object') {
+      const firstArr = Object.values(parsed).find(v => Array.isArray(v));
+      if (firstArr) return { items: firstArr };
+    }
+    return parsed;
+  } catch (e) {
+    console.error('[llmOnly] Error generating plain LLM answer:', e.message);
+    return null;
+  }
 }
+

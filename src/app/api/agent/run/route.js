@@ -8,8 +8,9 @@ const Body = z.object({ destination: z.string().min(2).max(80), homeCity: z.stri
 
 export async function POST(req) {
   const ip = req.headers.get('x-forwarded-for') || 'local', now = Date.now();
+  const isLocal = ip === 'local' || ip === '::1' || ip === '127.0.0.1';
   const recent = (hits.get(ip) || []).filter(t => now - t < 600000);
-  if (recent.length >= 5) return Response.json({ error: 'Rate limit: try again in a few minutes.' }, { status: 429 });
+  if (!isLocal && recent.length >= 5) return Response.json({ error: 'Rate limit: try again in a few minutes.' }, { status: 429 });
   hits.set(ip, [...recent, now]);
   const parsed = Body.safeParse(await req.json().catch(() => ({})));
   if (!parsed.success) return Response.json({ error: 'Invalid input' }, { status: 400 });
