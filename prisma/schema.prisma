@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id        String        @id @default(cuid())
+  name      String?
+  homeCity  String?
+  createdAt DateTime      @default(now())
+  entities  TasteEntity[]
+  plans     Plan[]
+}
+
+model TasteEntity {
+  id        String   @id @default(cuid())
+  profileId String
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  qlooId    String
+  name      String
+  type      String
+  imageUrl  String?
+}
+
+model Plan {
+  id           String   @id @default(cuid())
+  shareSlug    String   @unique
+  profileId    String
+  profile      Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  destination  String
+  resultJson   Json
+  evidenceJson Json
+  llmOnlyJson  Json?
+  createdAt    DateTime @default(now())
+}
+
+model QlooCache {
+  key       String   @id
+  response  Json
+  createdAt DateTime @default(now())
+}
