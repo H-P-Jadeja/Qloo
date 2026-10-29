@@ -1,12 +1,23 @@
 import { qloo, norm } from './client';
 
-const JUNK_REGEX = /hotel|hostel|apartment|lodging|inn\b|suites\b/i;
+// Tags/names that indicate a place is NOT a dining/hang-out spot
+const JUNK_REGEX = /hotel|hostel|apartment|lodging|inn\b|suites?\b|resort|motel|airbnb/i;
+
+// Tags/names that positively confirm a place IS food/drink/nightlife
+const EAT_ALLOW_REGEX = /restaurant|cafe|café|bar|bakery|brewery|coffee|bistro|street.?food|club|venue|pub|tavern|eatery|diner|brasserie|gastropub|food|kitchen|cantina|pizzeria|sushi|ramen|tapas|lounge/i;
+
+// Tags that are noisy / meaningless to show users
+const DISPLAY_JUNK_TAGS = /^(restroom|urination|morning|midday|standard|borough|religious|paid.?breakfast|room.?service|mild.?cool|mild cool|cool weather|weather|rating|overall|generic|average|basic|ordinary)$/i;
+
+// For the shop section: positive signals that indicate a browsable shop
+const SHOP_ALLOW_REGEX = /boutique|shop|store|market|vintage|record|concept.?store|gallery|bookshop|bookstore|design|fashion|craft|flea|art.?space|antique|clothing|apparel|retail/i;
 
 // GET /v2/insights  (signals + entity type + location filter)
-export async function getRecommendations({ entityIds = [], tagIds = [], entityType, location, take = 6 }) {
+export async function getRecommendations({ entityIds = [], tagIds = [], entityType, location, take = 6, sectionKey = '' }) {
   const isPlace = entityType === 'urn:entity:place';
-  // Fetch up to 15 if place/eat so filtering hotel/hostel/lodging leaves 6 good picks
-  const fetchTake = isPlace ? Math.max(take, 15) : take;
+  const isShop = sectionKey === 'shop';
+  // Fetch 30 for eat so we can filter aggressively and still get 6 good ones
+  const fetchTake = isPlace ? Math.max(take, 30) : take;
   const request = {
     'filter.type': entityType,
     'signal.interests.entities': entityIds.join(','),
@@ -19,14 +30,30 @@ export async function getRecommendations({ entityIds = [], tagIds = [], entityTy
 
   if (isPlace) {
     results = results.filter(r => {
-      const nameMatch = JUNK_REGEX.test(r.name || '');
-      const tagMatch = (r.tags || []).some(t => JUNK_REGEX.test(typeof t === 'string' ? t : t?.name || ''));
-      return !nameMatch && !tagMatch;
+      const name = r.name || '';
+      const tags = (r.tags || []).map(t => (typeof t === 'string' ? t : t?.name || ''));
+      const combined = [name, ...tags].join(' ');
+      // Drop hotels / lodging
+      if (JUNK_REGEX.test(combined)) return false;
+      // For eat section: only keep clear food/drink/venue places
+      if (!isShop && EAT_ALLOW_REGEX.test(combined)) return true;
+      // For shop section: only keep clear retail/browsable spots
+      if (isShop && SHOP_ALLOW_REGEX.test(combined)) return true;
+      // If no positive match but also not junk, still allow (Qloo knows best)
+      return !isShop;
     });
     results = results.slice(0, take);
   }
 
   return { request, results };
+}
+
+// Filter tags before display
+export function cleanTags(tags = []) {
+  return (tags || []).filter(t => {
+    const s = typeof t === 'string' ? t : (t?.name || '');
+    return s && !DISPLAY_JUNK_TAGS.test(s.trim());
+  });
 }
 
 export async function getTasteProfile(entityIds) {

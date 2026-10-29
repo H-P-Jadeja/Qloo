@@ -59,21 +59,21 @@ export default function CompareView({ slug, plan, evMap, llm: initialLlm, destin
         <div className="row" style={{ justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
           <div style={{ maxWidth: 700 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: '#bf5af2', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
-              ⚡ Concrete Hallucination Delta
+              ⚡ Taste Graph vs Plain LLM
             </div>
             <h2 style={{ fontSize: 'clamp(20px, 3vw, 26px)', fontWeight: 700, color: '#fff', margin: '0 0 8px' }}>
               {displayUnverified} of {totalLlm || 10} LLM suggestions couldn’t be matched to Qloo’s taste graph for this profile
             </h2>
             <p className="sub" style={{ fontSize: 14, margin: 0, lineHeight: 1.5 }}>
-              Standard LLMs guess based on outdated web text, recommending generic tourist traps or permanently closed venues. Qloo enforces 100% strict grounding against live cultural coordinates.
+              Plain LLMs recommend from general popularity and echo your inputs — not your actual taste signals. Most of these places may exist, but none is tied to your cultural fingerprint. Qloo recommends from your specific taste graph, filtered by location. The plain LLM matched names, not taste.
             </p>
           </div>
 
           <div style={{ textAlign: 'center', background: 'rgba(255, 255, 255, 0.04)', padding: '14px 20px', borderRadius: 16, border: '1px solid rgba(255, 255, 255, 0.08)' }}>
             <span className="chip chip-verified" style={{ fontSize: 13, padding: '6px 14px', marginBottom: 4, display: 'inline-block' }}>
-              ✔ 100% Qloo Grounded
+              ✔ Every pick from Qloo
             </span>
-            <div style={{ fontSize: 11, color: '#86868b' }}>Zero Invented Venues</div>
+            <div style={{ fontSize: 11, color: '#86868b' }}>With evidence on each</div>
           </div>
         </div>
       </div>
@@ -120,7 +120,7 @@ export default function CompareView({ slug, plan, evMap, llm: initialLlm, destin
               )}
             </div>
             <p className="sub" style={{ fontSize: 13, marginTop: 8, lineHeight: 1.5 }}>
-              Direct ungrounded completion without taste graph constraints. Prone to generic tourist spots, invented places, and zero evidence.
+              Direct LLM completion without taste graph constraints. The LLM may recommend real places, but picks are driven by general popularity — not your taste. None has Qloo evidence.
             </p>
           </div>
 

@@ -35,7 +35,7 @@ export default function PlanDetailView({ plan, evMap }) {
   sections.forEach(sec => {
     (sec.picks || []).forEach(p => {
       // Prioritize eat, hood, or items that are physical venues
-      if (sec.key === 'eat' || sec.key === 'hood' || p.location || p.address) {
+      if (sec.key === 'eat' || sec.key === 'hood' || sec.key === 'shop' || p.location || p.address) {
         places.push({
           ...p,
           sectionKey: sec.key,

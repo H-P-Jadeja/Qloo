@@ -1,6 +1,16 @@
 'use client';
 import EvidenceDrawer from './EvidenceDrawer';
 
+// Noisy tags that add no value to the user
+const JUNK_TAG_RE = /^(restroom|urination|morning|midday|standard|borough|religious|paid.?breakfast|room.?service|mild.?cool|cool weather|mild cool weather|rating|overall|generic|average|basic|ordinary|toilet)$/i;
+
+function cleanTags(tags = []) {
+  return (tags || []).filter(t => {
+    const s = typeof t === 'string' ? t : (t?.name || t || '');
+    return s && !JUNK_TAG_RE.test(s.trim());
+  });
+}
+
 export default function PickCard({ pick, ev, destination = '', onFocusMap = null, isFocused = false }) {
   const isPlace = !!(pick.location || pick.address || pick.neighborhood || (pick.qlooId && pick.qlooId.length > 5));
   const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
@@ -54,15 +64,18 @@ export default function PickCard({ pick, ev, destination = '', onFocusMap = null
           </p>
         </div>
 
-        {pick.tags && pick.tags.length > 0 && (
-          <div className="row" style={{ gap: 6, marginBottom: 12 }}>
-            {pick.tags.slice(0, 3).map((tag, idx) => (
-              <span key={idx} className="chip" style={{ fontSize: 11, padding: '2px 8px' }}>
-                #{tag}
-              </span>
-            ))}
-          </div>
-        )}
+        {pick.tags && pick.tags.length > 0 && (() => {
+          const displayTags = cleanTags(pick.tags).slice(0, 4);
+          return displayTags.length > 0 ? (
+            <div className="row" style={{ gap: 6, marginBottom: 12, flexWrap: 'wrap' }}>
+              {displayTags.map((tag, idx) => (
+                <span key={idx} className="chip" style={{ fontSize: 11, padding: '2px 8px' }}>
+                  #{typeof tag === 'string' ? tag : tag?.name || tag}
+                </span>
+              ))}
+            </div>
+          ) : null;
+        })()}
 
         <div className="pick-actions" style={{ flexWrap: 'wrap', gap: 8 }}>
           {onFocusMap && isPlace && (

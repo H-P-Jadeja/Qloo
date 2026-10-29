@@ -242,7 +242,7 @@ export default function InteractiveMap({
       <div className="map-header">
         <div className="row" style={{ gap: 10 }}>
           <span className="chip chip-map">
-            📍 {placesWithCoords.length} Qloo Places in {destination}
+            📍 {placesWithCoords.length} places in {destination} (pins approximate)
           </span>
 
           {/* Category Filter Pills */}
@@ -306,7 +306,7 @@ export default function InteractiveMap({
                 boxShadow: mapMode === 'google' ? '0 2px 8px rgba(0, 113, 227, 0.4)' : 'none',
               }}
             >
-              Google Maps Live
+              Google Maps Search
             </button>
           </div>
 

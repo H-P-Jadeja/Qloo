@@ -60,11 +60,15 @@ function formatQlooQuestion(toolName, args, entities, destination) {
 }
 
 // Every pick is rebuilt from a Qloo result; anything the LLM invents is dropped.
-function finalize(plan, seen) {
+function finalize(plan, seen, destination) {
   const p = PlanSchema.parse(plan);
+  const destNorm = (destination || '').trim().toLowerCase();
   p.sections = p.sections.map(s => ({
     ...s,
-    picks: s.picks.filter(k => seen.has(k.qlooId)).map(k => ({ ...seen.get(k.qlooId), reason: k.reason }))
+    picks: s.picks
+      .filter(k => seen.has(k.qlooId))
+      .filter(k => s.key !== 'hood' || (k.name || '').trim().toLowerCase() !== destNorm)
+      .map(k => ({ ...seen.get(k.qlooId), reason: k.reason }))
   }));
   return p;
 }
@@ -108,7 +112,7 @@ export async function runAgent({ entities, destination, onStep = () => { } }) {
         const m = await chat(msgs, TOOLS);
         msgs.push(m);
         if (!m.tool_calls?.length) {
-          const plan = finalize(parse(m.content), seen);
+          const plan = finalize(parse(m.content), seen, destination);
           if (tasteDna.length) plan.tasteDna = tasteDna;
           return { plan, evidence };
         }
@@ -139,27 +143,31 @@ export async function runAgent({ entities, destination, onStep = () => { } }) {
 
   const rawSections = await Promise.all(
     SECTIONS.map(async s => {
-      const args = { entityIds: ids, entityType: s.type, location: destination };
+      const args = { entityIds: ids, entityType: s.type, location: destination, sectionKey: s.key };
       try {
         const out = await EXEC.get_recommendations(args);
         const evId = record('get_recommendations', args, out);
-        return {
-          key: s.key,
-          title: s.title,
-          picks: (out.results || []).map(r => ({
-            qlooId: r.id,
-            name: r.name,
-            image: r.image,
-            tags: r.tags,
-            evidenceId: evId,
-            location: r.location,
-            address: r.address,
-            neighborhood: r.neighborhood,
-            reason: r.tags && r.tags.length
-              ? `Matches your taste via shared Qloo tags: ${r.tags.slice(0, 3).join(', ')}`
-              : `High affinity cultural match in ${destination} verified by Qloo.`
-          }))
-        };
+        let picks = (out.results || []).map(r => ({
+          qlooId: r.id,
+          name: r.name,
+          image: r.image,
+          tags: r.tags,
+          evidenceId: evId,
+          location: r.location,
+          address: r.address,
+          neighborhood: r.neighborhood,
+          reason: r.tags && r.tags.length
+            ? `Matches your taste via shared Qloo tags: ${r.tags.slice(0, 3).join(', ')}`
+            : `High affinity cultural match in ${destination} verified by Qloo.`
+        }));
+        // Neighborhoods: drop any result whose name equals the destination city
+        if (s.key === 'hood') {
+          const destNorm = destination.trim().toLowerCase();
+          picks = picks.filter(p => (p.name || '').trim().toLowerCase() !== destNorm);
+        }
+        // Listen: add subtitle hint
+        const extra = s.key === 'listen' ? { subtitle: `What ${destination} listeners with your taste play` } : {};
+        return { key: s.key, title: s.title, picks, ...extra };
       } catch (e) {
         console.warn(`[Qloo fallback] Skipped ${s.title}:`, e.message);
         return null;

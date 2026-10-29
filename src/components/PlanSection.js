@@ -11,6 +11,7 @@ const SECTION_ICONS = {
 
 export default function PlanSection({ section, evMap, destination = '', onFocusMap = null, focusedId = null }) {
   const icon = SECTION_ICONS[section?.key] || '✨';
+  const subtitle = section?.subtitle || (section?.key === 'listen' ? `What ${destination || 'your city'} listeners with your taste play` : null);
 
   if (!section?.picks?.length) {
     return (
@@ -33,9 +34,14 @@ export default function PlanSection({ section, evMap, destination = '', onFocusM
   return (
     <section style={{ marginBottom: 40 }}>
       <div className="row" style={{ alignItems: 'baseline', marginBottom: 16 }}>
-        <h3 style={{ fontSize: 24, fontWeight: 700, letterSpacing: '-0.02em' }}>
-          {icon} {section.title}
-        </h3>
+        <div>
+          <h3 style={{ fontSize: 24, fontWeight: 700, letterSpacing: '-0.02em', marginBottom: subtitle ? 4 : 0 }}>
+            {icon} {section.title}
+          </h3>
+          {subtitle && (
+            <p style={{ fontSize: 12, color: '#86868b', margin: 0 }}>{subtitle}</p>
+          )}
+        </div>
         <span className="sub" style={{ fontSize: 13 }}>
           {section.picks.length} recommendations
         </span>

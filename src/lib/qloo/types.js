@@ -10,7 +10,7 @@ export const DOMAINS = [
 export const SECTIONS = [
   { key:'eat', title:'Eat & Hang out', type:T.place },
   { key:'listen', title:'Listen', type:T.artist },
-  { key:'shop', title:'Shop', type:T.brand },
+  { key:'shop', title:'Shop & Browse', type:T.place },
   { key:'watch', title:'Watch', type:T.movie },
   { key:'hood', title:'Neighborhood vibe', type:'urn:entity:locality' },
 ];

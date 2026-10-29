@@ -31,8 +31,9 @@ export default function AppleFooter() {
             <ul>
               <li><a href="https://docs.qloo.com" target="_blank" rel="noreferrer">Qloo API Documentation ↗</a></li>
               <li><a href="https://qloo.com" target="_blank" rel="noreferrer">Qloo Taste Graph Platform ↗</a></li>
-              <li><span style={{ color: '#86868b' }}>Endpoint: /v2/insights</span></li>
-              <li><span style={{ color: '#86868b' }}>Taste DNA via /v2/insights</span></li>
+              <li><span style={{ color: '#86868b' }}>/v2/insights — recommendations</span></li>
+              <li><span style={{ color: '#86868b' }}>/search — entity resolution</span></li>
+              <li><span style={{ color: '#86868b' }}>/v2/tags — taste tag signals</span></li>
             </ul>
           </div>
 

@@ -133,25 +133,14 @@ export default function AppleHeader() {
                     {mapLinkText}
                   </Link>
                 ) : (
-                  <button
-                    type="button"
-                    onClick={() => handleLockedClick('Map')}
-                    title="Generate a relocation plan first to unlock your interactive map"
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: '#86868b',
-                      opacity: 0.6,
-                      cursor: 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 4,
-                      fontSize: 12,
-                      padding: '4px 6px',
-                    }}
+                  <Link
+                    href="/plan/4tpk4dgk"
+                    title="View demo plan — or generate your own"
+                    style={{ color: '#86868b', opacity: 0.7 }}
+                    onClick={launchQuickDemo}
                   >
-                    <span style={{ fontSize: 10 }}>🔒</span> {mapLinkText}
-                  </button>
+                    {mapLinkText}
+                  </Link>
                 )}
               </li>
 
@@ -165,25 +154,14 @@ export default function AppleHeader() {
                     Compare LLM
                   </Link>
                 ) : (
-                  <button
-                    type="button"
-                    onClick={() => handleLockedClick('LLM Comparison')}
-                    title="Generate a relocation plan first to unlock LLM comparison"
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: '#86868b',
-                      opacity: 0.6,
-                      cursor: 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 4,
-                      fontSize: 12,
-                      padding: '4px 6px',
-                    }}
+                  <Link
+                    href="/compare/4tpk4dgk"
+                    title="View demo LLM comparison — or generate your own"
+                    style={{ color: '#86868b', opacity: 0.7 }}
+                    onClick={launchQuickDemo}
                   >
-                    <span style={{ fontSize: 10 }}>🔒</span> Compare LLM
-                  </button>
+                    Compare LLM
+                  </Link>
                 )}
               </li>
             </ul>
