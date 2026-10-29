@@ -14,7 +14,7 @@ function cleanTags(tags = []) {
 export default function PickCard({ pick, ev, destination = '', onFocusMap = null, isFocused = false }) {
   const isPlace = !!(pick.location || pick.address || pick.neighborhood || (pick.qlooId && pick.qlooId.length > 5));
   const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-    pick.name + ' ' + (pick.address || destination || '')
+    pick.name + ' ' + (typeof pick.address === 'string' ? pick.address : typeof pick.address === 'object' && pick.address ? [pick.address.city, pick.address.country].filter(Boolean).join(', ') : destination || '')
   )}`;
 
   return (

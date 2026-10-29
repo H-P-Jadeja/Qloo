@@ -56,7 +56,7 @@ export default function EvidenceDrawer({ ev }) {
             <code style={{ color: '#2997ff', background: 'transparent', padding: 0 }}>/v2/insights</code>
 
             <span style={{ color: '#86868b' }}>Location Filter:</span>
-            <span style={{ color: '#fff' }}>{req['filter.location.query'] || req.location || 'Local Target'}</span>
+            <span style={{ color: '#fff' }}>{req['filter.location.query'] || (typeof req.location === 'string' ? req.location : 'Local Target')}</span>
 
             <span style={{ color: '#86868b' }}>Entity Type:</span>
             <span style={{ color: '#fff' }}>{req['filter.type'] || req.entityType || 'urn:entity:place'}</span>

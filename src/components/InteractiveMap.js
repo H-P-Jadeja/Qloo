@@ -1,6 +1,17 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 
+// Guard: Qloo location/address fields can be objects. Always coerce to string for render.
+function safeStr(val) {
+  if (!val) return '';
+  if (typeof val === 'string') return val;
+  if (typeof val === 'object') {
+    // {city, metro, state, country, neighborhood} descriptor
+    return [val.city, val.neighborhood, val.state, val.country].filter(Boolean).join(', ');
+  }
+  return String(val);
+}
+
 // Common city centers for fallback coordinates
 const CITY_CENTERS = {
   mumbai: { lat: 19.076, lon: 72.8777 },
@@ -161,7 +172,7 @@ export default function InteractiveMap({
               ${place.reason || 'Taste-matched place in ' + destination}
             </div>
             <div style="display: flex; gap: 8px;">
-              <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name + ' ' + (place.address || destination))}" target="_blank" rel="noreferrer" style="
+              <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name + ' ' + (safeStr(place.address) || destination))}" target="_blank" rel="noreferrer" style="
                 flex: 1;
                 background: #0071e3;
                 color: #fff;
@@ -175,7 +186,7 @@ export default function InteractiveMap({
               ">
                 Google Maps ↗
               </a>
-              <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(place.name + ' ' + (place.address || destination))}" target="_blank" rel="noreferrer" style="
+              <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(place.name + ' ' + (safeStr(place.address) || destination))}" target="_blank" rel="noreferrer" style="
                 background: rgba(255, 255, 255, 0.1);
                 color: #fff;
                 padding: 6px 10px;
@@ -229,11 +240,11 @@ export default function InteractiveMap({
 
   const activeFocus = selectedPlace || placesWithCoords[0];
   const googleEmbedQuery = activeFocus
-    ? encodeURIComponent(`${activeFocus.name}, ${activeFocus.address || destination}`)
+    ? encodeURIComponent(`${activeFocus.name}, ${safeStr(activeFocus.address) || destination}`)
     : encodeURIComponent(destination);
 
   const googleMapsSearchUrl = activeFocus
-    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activeFocus.name + ' ' + (activeFocus.address || destination))}`
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activeFocus.name + ' ' + (safeStr(activeFocus.address) || destination))}`
     : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(destination)}`;
 
   return (
@@ -428,7 +439,7 @@ export default function InteractiveMap({
                       textOverflow: 'ellipsis',
                     }}
                   >
-                    {place.neighborhood || place.address || destination}
+                    {safeStr(place.neighborhood) || safeStr(place.address) || destination}
                   </div>
                 </div>
               </div>
