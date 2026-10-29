@@ -10,8 +10,8 @@ export default function AppleFooter() {
             <ul>
               <li><Link href="/onboarding">Build Taste Profile</Link></li>
               <li><Link href="/destination">Destination Concierge</Link></li>
-              <li><Link href="/plan/4tpk4dgk">Live Demo (Berlin)</Link></li>
-              <li><Link href="/compare/4tpk4dgk">LLM Grounding Benchmark</Link></li>
+              <li><Link href="/plan/cnidwx59">Live Demo (Berlin)</Link></li>
+              <li><Link href="/compare/cnidwx59">LLM Grounding Benchmark</Link></li>
             </ul>
           </div>
 
@@ -55,7 +55,7 @@ export default function AppleFooter() {
             <span>•</span>
             <a href="https://docs.qloo.com" target="_blank" rel="noreferrer">Qloo Docs</a>
             <span>•</span>
-            <Link href="/compare/4tpk4dgk">LLM Benchmark</Link>
+            <Link href="/compare/cnidwx59">LLM Benchmark</Link>
           </div>
         </div>
       </div>

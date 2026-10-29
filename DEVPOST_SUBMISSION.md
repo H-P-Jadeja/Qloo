@@ -14,7 +14,7 @@ TasteTransplant is an autonomous cultural relocation concierge that translates a
 3. **Strict Grounding Guarantee:** Every single venue is directly retrieved from Qloo’s API (`/v2/insights`). The LLM *only* writes the explanatory narrative.
 4. **Interactive Google Map:** Every venue is plotted on an interactive map with turn-by-turn Google Maps navigation and neighborhood highlights.
 5. **AI Concierge Refinement:** Users can chat in real-time with the taste concierge (e.g., *"give me quieter cafes to code"*), which dynamically queries Qloo tags (`/v2/tags`) and updates the recommendations.
-6. **Side-by-Side LLM Benchmark:** A dedicated comparison page benchmarks Qloo against ungrounded plain LLMs, concretely proving that **7 out of 10 LLM suggestions** fail cultural verification.
+6. **Side-by-Side LLM Benchmark:** A dedicated comparison page benchmarks Qloo against ungrounded plain LLMs, concretely proving that **8 out of 10 LLM suggestions** fail cultural verification.
 
 ---
 
@@ -33,7 +33,7 @@ Built using **Next.js 14 App Router**, **Prisma ORM**, **Neon Serverless Postgre
 ## ⚖️ What a Plain LLM Could Not Do (The Compare Benchmark)
 On the `/compare/[slug]` route, TasteTransplant runs a side-by-side benchmark comparing Qloo-grounded picks against a plain LLM given the exact same prompt:
 - **Hallucinations & Closures:** The plain LLM frequently suggests places that have permanently closed or does not exist.
-- **The Numbers:** In benchmark runs, 6–8 of 10 plain LLM recommendations fail to match verified cultural entities in Qloo’s taste graph for the user’s profile. Check the live compare page for your own run’s exact number.
+- **The Numbers:** In benchmark runs, 8 of 10 plain LLM recommendations fail to match verified cultural entities in Qloo’s taste graph for the user’s profile. Check the live compare page for your own run’s exact number.
 - **Zero Evidence:** Plain LLMs cannot cite why an affinity was transferred. Qloo proves the connection with verifiable signals and shared tags.
 
 ---

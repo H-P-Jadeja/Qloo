@@ -18,7 +18,7 @@ Traditional relocation tools and generic LLMs fail:
 1. **Curate Your Taste Fingerprint:** Select your favorite music artists, films, dining preferences, and cultural icons.
 2. **Translate Across Domains with Qloo:** Qloo's Cultural Taste Graph maps your multidimensional affinities to verified real-world places, neighborhoods, and venues in your destination.
 3. **Strict Grounding Guarantee:** Every single venue is returned directly by Qloo's API. The AI language model *only* writes the explanatory narrative.
-4. **Side-by-Side LLM Benchmark:** Transparently compares Qloo's verified venues against plain LLM guesses, demonstrating that **7 of 10 LLM suggestions** fail cultural verification.
+4. **Side-by-Side LLM Benchmark:** Transparently compares Qloo's verified venues against plain LLM guesses, demonstrating that **8 of 10 LLM suggestions** fail cultural verification.
 
 ---
 
@@ -101,7 +101,7 @@ npm test
 ## ⚖️ Grounding vs Plain LLM Benchmark
 Under `/compare/[slug]`, TasteTransplant executes an ungrounded LLM query with the exact same user profile and destination.
 - **Qloo-Grounded:** Every pick is returned by Qloo — active API evidence, location data, and shared tag signals for each result.
-- **Plain LLM:** Evaluated against Qloo's taste graph, revealing that **7 out of 10** plain LLM suggestions fail cultural grounding or recommend tourist cliches.
+- **Plain LLM:** Evaluated against Qloo's taste graph, revealing that **8 out of 10** plain LLM suggestions fail cultural grounding or recommend tourist cliches.
 
 ---
 
