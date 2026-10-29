@@ -23,10 +23,49 @@ export const parse = s => {
   }
 };
 
+// Formats a tool call into a meaningful, human-readable question being asked to Qloo
+function formatQlooQuestion(toolName, args, entities, destination) {
+  const sampleNames = (entities || []).slice(0, 2).map(e => e.name).join(' & ');
+  const entityDesc = sampleNames ? `your affinity for ${sampleNames}` : 'your cultural profile';
+
+  switch (toolName) {
+    case 'get_recommendations': {
+      const type = (args.entityType || '').toLowerCase();
+      if (type.includes('place') || type.includes('eat')) {
+        return `🍽️ Asking Qloo: "Which dining spots, cafes & bars in ${destination} resonate with ${entityDesc}?"`;
+      }
+      if (type.includes('locality') || type.includes('hood')) {
+        return `🏘️ Asking Qloo: "Which neighborhoods in ${destination} share the cultural atmosphere of ${entityDesc}?"`;
+      }
+      if (type.includes('artist') || type.includes('listen')) {
+        return `🎵 Asking Qloo: "Which local musicians, soundscapes & live venues in ${destination} fit ${entityDesc}?"`;
+      }
+      if (type.includes('brand') || type.includes('shop')) {
+        return `🛍️ Asking Qloo: "Where can you find independent boutiques, books & design spaces in ${destination}?"`;
+      }
+      if (type.includes('movie') || type.includes('watch')) {
+        return `🎬 Asking Qloo: "Which indie cinemas, art hubs & film spaces in ${destination} align with ${entityDesc}?"`;
+      }
+      return `✨ Asking Qloo: "Finding cultural recommendations in ${destination} matched with ${entityDesc}..."`;
+    }
+    case 'get_taste_profile':
+      return `🧬 Asking Qloo: "Extracting multidimensional taste DNA and correlations from ${sampleNames || 'your profile'}..."`;
+    case 'search_tags':
+      return `🏷️ Asking Qloo: "Querying taste graph taxonomy for '${args.query || 'atmosphere'}' tags..."`;
+    case 'search_entity':
+      return `🔍 Asking Qloo: "Locating verified cultural coordinates for '${args.query || 'entity'}'..."`;
+    default:
+      return `✨ Asking Qloo: "Querying taste graph intelligence for ${destination}..."`;
+  }
+}
+
 // Every pick is rebuilt from a Qloo result; anything the LLM invents is dropped.
 function finalize(plan, seen) {
   const p = PlanSchema.parse(plan);
-  p.sections = p.sections.map(s => ({ ...s, picks: s.picks.filter(k => seen.has(k.qlooId)).map(k => ({ ...seen.get(k.qlooId), reason: k.reason })) }));
+  p.sections = p.sections.map(s => ({
+    ...s,
+    picks: s.picks.filter(k => seen.has(k.qlooId)).map(k => ({ ...seen.get(k.qlooId), reason: k.reason }))
+  }));
   return p;
 }
 
@@ -36,37 +75,107 @@ export async function runAgent({ entities, destination, onStep = () => { } }) {
   const record = (tool, args, out) => {
     const id = `e${evidence.length + 1}`;
     evidence.push({ id, tool, args, request: out.request, count: out.results?.length });
-    (out.results || []).forEach(r => r.id && !seen.has(r.id) && seen.set(r.id, { qlooId: r.id, name: r.name, image: r.image, tags: r.tags, evidenceId: id }));
+    (out.results || []).forEach(r => r.id && !seen.has(r.id) && seen.set(r.id, {
+      qlooId: r.id,
+      name: r.name,
+      image: r.image,
+      tags: r.tags,
+      evidenceId: id,
+      location: r.location,
+      address: r.address,
+      neighborhood: r.neighborhood
+    }));
     return id;
   };
 
+  // Pre-fetch user's Taste DNA tags in parallel
+  let tasteDna = [];
+  try {
+    const tp = await EXEC.get_taste_profile({ entityIds: ids });
+    tasteDna = (tp.results || []).map(t => t.name).filter(Boolean);
+  } catch (e) {
+    console.warn('[Taste DNA pre-fetch]', e.message);
+  }
+
   if (llmEnabled()) {
     try {
-      const msgs = [{ role: 'system', content: SYSTEM }, { role: 'user', content: JSON.stringify({ destination, entities: entities.map(e => ({ id: e.qlooId, name: e.name, type: e.type })) }) }];
-      const deadline = Date.now() + 35000;
-      for (let i = 0; i < 8 && Date.now() < deadline; i++) {
-        const m = await chat(msgs, TOOLS); msgs.push(m);
-        if (!m.tool_calls?.length) return { plan: finalize(parse(m.content), seen), evidence };
+      const msgs = [
+        { role: 'system', content: SYSTEM },
+        { role: 'user', content: JSON.stringify({ destination, entities: entities.map(e => ({ id: e.qlooId, name: e.name, type: e.type })) }) }
+      ];
+      const deadline = Date.now() + 25000;
+      for (let i = 0; i < 6 && Date.now() < deadline; i++) {
+        const m = await chat(msgs, TOOLS);
+        msgs.push(m);
+        if (!m.tool_calls?.length) {
+          const plan = finalize(parse(m.content), seen);
+          if (tasteDna.length) plan.tasteDna = tasteDna;
+          return { plan, evidence };
+        }
         const outs = await Promise.all(m.tool_calls.map(async tc => {
-          const args = JSON.parse(tc.function.arguments || '{}'); let out; onStep(`Agent calls ${tc.function.name}`);
-          try { out = await EXEC[tc.function.name](args); out.evidenceId = record(tc.function.name, args, out); } catch (e) { out = { error: e.message }; }
+          const args = JSON.parse(tc.function.arguments || '{}');
+          let out;
+          onStep(formatQlooQuestion(tc.function.name, args, entities, destination));
+          try {
+            out = await EXEC[tc.function.name](args);
+            out.evidenceId = record(tc.function.name, args, out);
+          } catch (e) {
+            out = { error: e.message };
+          }
           const slim = out.results ? { evidenceId: out.evidenceId, results: out.results.slice(0, 8).map(r => ({ id: r.id, name: r.name, tags: (r.tags || []).slice(0, 3) })) } : out;
           return { role: 'tool', tool_call_id: tc.id, content: JSON.stringify(slim).slice(0, 4000) };
         }));
         msgs.push(...outs);
       }
-    } catch (e) { console.error('LLM path failed, using Qloo-only plan:', e.message); }
+    } catch (e) {
+      console.error('LLM path failed, using parallel Qloo-only plan:', e.message);
+    }
   }
-  // Fallback: pure Qloo, no LLM
-  const sections = [];
-  for (const s of SECTIONS) {
-    const args = { entityIds: ids, entityType: s.type, location: destination };
-    onStep(`Asking Qloo for ${s.title} in ${destination}`);
-    let out; try { out = await EXEC.get_recommendations(args); } catch (e) { onStep(`Skipped ${s.title}: ${e.message.slice(0, 60)}`); continue; }
-    const evId = record('get_recommendations', args, out);
-    sections.push({ key: s.key, title: s.title, picks: out.results.map(r => ({ qlooId: r.id, name: r.name, image: r.image, tags: r.tags, evidenceId: evId, reason: r.tags.length ? `Matches your taste via: ${r.tags.slice(0, 3).join(', ')}` : 'High taste affinity in this city (Qloo).' })) });
-  }
-  return { plan: { summary: `Taste-matched picks for ${destination}, straight from the Qloo taste graph.`, sections }, evidence };
+
+  // Fast Fallback: pure Qloo executed in parallel with Promise.all
+  const sampleNames = entities.slice(0, 2).map(e => e.name).join(' & ');
+  const entityDesc = sampleNames ? `your affinity for ${sampleNames}` : 'your taste profile';
+  onStep(`Asking Qloo for 5 cultural dimensions in ${destination} in parallel...`);
+
+  const rawSections = await Promise.all(
+    SECTIONS.map(async s => {
+      const args = { entityIds: ids, entityType: s.type, location: destination };
+      try {
+        const out = await EXEC.get_recommendations(args);
+        const evId = record('get_recommendations', args, out);
+        return {
+          key: s.key,
+          title: s.title,
+          picks: (out.results || []).map(r => ({
+            qlooId: r.id,
+            name: r.name,
+            image: r.image,
+            tags: r.tags,
+            evidenceId: evId,
+            location: r.location,
+            address: r.address,
+            neighborhood: r.neighborhood,
+            reason: r.tags && r.tags.length
+              ? `Matches your taste via shared Qloo tags: ${r.tags.slice(0, 3).join(', ')}`
+              : `High affinity cultural match in ${destination} verified by Qloo.`
+          }))
+        };
+      } catch (e) {
+        console.warn(`[Qloo fallback] Skipped ${s.title}:`, e.message);
+        return null;
+      }
+    })
+  );
+
+  const sections = rawSections.filter(Boolean);
+  return {
+    plan: {
+      summary: `Taste-matched cultural guide for ${destination}, grounded in Qloo’s taste graph.`,
+      sections,
+      tasteDna: tasteDna.length ? tasteDna : undefined,
+    },
+    evidence,
+  };
 }
 
 export async function llmOnly({ entities, destination }) {
@@ -75,25 +184,14 @@ export async function llmOnly({ entities, destination }) {
     return null;
   }
   try {
-    const m = await chat([
+    const msgs = [
       { role: 'system', content: LLM_ONLY },
-      { role: 'user', content: JSON.stringify({ destination, loves: (entities || []).map(e => e.name) }) }
-    ]);
-    const parsed = parse(m.content);
-    if (Array.isArray(parsed)) {
-      return { items: parsed };
-    }
-    if (parsed && Array.isArray(parsed.items)) {
-      return parsed;
-    }
-    if (parsed && typeof parsed === 'object') {
-      const firstArr = Object.values(parsed).find(v => Array.isArray(v));
-      if (firstArr) return { items: firstArr };
-    }
-    return parsed;
+      { role: 'user', content: JSON.stringify({ destination, entities: entities.map(e => e.name) }) }
+    ];
+    const m = await chat(msgs);
+    return parse(m.content);
   } catch (e) {
-    console.error('[llmOnly] Error generating plain LLM answer:', e.message);
+    console.error('LLM-only fallback failed:', e.message);
     return null;
   }
 }
-

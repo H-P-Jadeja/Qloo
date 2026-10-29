@@ -1,7 +1,17 @@
-export const norm = e => ({
-  id: e.entity_id || e.id, name: e.name,
-  type: e.subtype || (e.types && e.types[0]) || e.type || null,
-  image: e.properties?.image?.url || e.image?.url || null,
-  score: e.query?.affinity ?? e.affinity ?? null,
-  tags: (e.tags || []).map(t => t.name).filter(Boolean).slice(0, 6),
-});
+export const norm = e => {
+  const res = {
+    id: e.entity_id || e.id,
+    name: e.name,
+    type: e.subtype || (e.types && e.types[0]) || e.type || null,
+    image: e.properties?.image?.url || e.image?.url || null,
+    score: e.query?.affinity ?? e.affinity ?? null,
+    tags: (e.tags || []).map(t => t.name).filter(Boolean).slice(0, 6),
+  };
+  const loc = e.location || (e.properties?.latitude ? { lat: e.properties.latitude, lon: e.properties.longitude } : null);
+  if (loc) res.location = loc;
+  if (e.properties?.address) res.address = e.properties.address;
+  if (e.properties?.neighborhood || e.properties?.locality) res.neighborhood = e.properties.neighborhood || e.properties.locality;
+  if (e.properties?.geocode) res.geocode = e.properties.geocode;
+  return res;
+};
+

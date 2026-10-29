@@ -22,7 +22,7 @@ export async function chat(messages, tools, overrideModel = null) {
   for (let attempt = 0; attempt < 3; attempt++) {
     const r = await fetch(url, {
       method: 'POST',
-      signal: AbortSignal.timeout(45000),
+      signal: AbortSignal.timeout(20000),
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${process.env.LLM_API_KEY}`
