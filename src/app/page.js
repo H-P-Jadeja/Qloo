@@ -59,14 +59,14 @@ export default function Home() {
                   ⚖️ The Core Differentiator
                 </span>
                 <span className="chip chip-verified" style={{ fontSize: 11 }}>
-                  Zero Hallucination
+                  Qloo-grounded picks
                 </span>
               </div>
               <h2 style={{ fontSize: 'clamp(22px, 3.5vw, 30px)', fontWeight: 700, margin: '4px 0 8px', letterSpacing: '-0.02em', color: '#fff' }}>
                 Same user, same city: LLM guesses vs Qloo knows.
               </h2>
               <p className="sub" style={{ fontSize: 14, lineHeight: 1.5, margin: 0 }}>
-                Generic LLMs hallucinate permanently closed cafes and generic tourist traps. See the concrete side-by-side benchmark where 7 of 10 LLM suggestions fail cultural grounding.
+                Plain LLMs recommend from general popularity and echo your inputs back as place names. See the side-by-side benchmark: the LLM matched names, not taste — Qloo matched your cultural signals.
               </p>
             </div>
 
@@ -172,7 +172,7 @@ export default function Home() {
             <div style={{ fontSize: 32, marginBottom: 12 }}>🛡️</div>
             <h3 style={{ fontSize: 20, marginBottom: 8 }}>Strict Grounding Guarantee</h3>
             <p className="sub">
-              Every pick is returned directly by Qloo’s API. Generic LLMs routinely invent permanently closed spots or fictitious cafes. TasteTransplant enforces strict grounding: the AI only writes the explanation.
+              Every pick is returned directly by Qloo’s API. A plain LLM recommends from general popularity and can’t prove why a place matches you. TasteTransplant enforces strict grounding: the AI only writes the explanation.
             </p>
           </div>
 
