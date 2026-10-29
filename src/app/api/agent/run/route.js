@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { runAgent, llmOnly } from '@/lib/agent/loop';

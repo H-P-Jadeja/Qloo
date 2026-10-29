@@ -1,24 +1,25 @@
 {
-    "name": "taste-transplant",
-    "version": "0.1.0",
-    "private": true,
-    "scripts": {
-        "dev": "next dev",
-        "build": "prisma generate && next build",
-        "start": "next start",
-        "db:push": "prisma db push",
-        "test": "node --test 'tests/**/*.test.mjs'",
-        "qloo:test": "node --env-file=.env scripts/qloo-test.mjs"
-    },
-    "dependencies": {
-        "@prisma/client": "^5.22.0",
-        "leaflet": "^1.9.4",
-        "next": "^14.2.15",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1",
-        "zod": "^3.23.8"
-    },
-    "devDependencies": {
-        "prisma": "^5.22.0"
-    }
+  "name": "taste-transplant",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "db:push": "prisma db push",
+    "test": "node --test 'tests/**/*.test.mjs'",
+    "qloo:test": "node --env-file=.env scripts/qloo-test.mjs",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "leaflet": "^1.9.4",
+    "next": "^14.2.15",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "prisma": "^5.22.0"
+  }
 }

@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { searchEntity } from '@/lib/qloo/search';
 export async function GET(req) {
   const u = new URL(req.url); const q = u.searchParams.get('q'), type = u.searchParams.get('type');
