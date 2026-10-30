@@ -3,7 +3,24 @@ import { TOOLS, EXEC } from './tools';
 import { SYSTEM, LLM_ONLY } from './prompts';
 import { PlanSchema } from './schema';
 import { SECTIONS } from '@/lib/qloo/types';
+const STAY = /self.?catering|full kitchen|business center|room service|serviced apartment|aparthotel/i;
+const SHOP = /shop|store|boutique|clothing|fashion|retail|market|vintage|record|bookstore|department/i;
+const BAR = /\bbar\b|pub|cocktail|gin|nightclub/i;
 
+export function cleanSections(sections, destination) {
+  const used = new Set(), city = destination.trim().toLowerCase();
+  return sections.map(s => {
+    const t = p => (p.tags || []).join(' ');
+    let picks = s.picks.filter(p => !STAY.test(t(p) + ' ' + p.name));
+    if (s.key === 'shop') {
+      const strict = picks.filter(p => !used.has(p.qlooId) && SHOP.test(t(p)) && !BAR.test(t(p)));
+      picks = strict.length >= 3 ? strict : picks.filter(p => !used.has(p.qlooId) && !BAR.test(t(p)));
+    }
+    if (s.key === 'hood') picks = picks.filter(p => { const n = p.name.toLowerCase(); return n !== city && n !== `greater ${city}`; });
+    if (s.key === 'eat') picks.forEach(p => used.add(p.qlooId));
+    return { ...s, picks };
+  });
+}
 export const parse = s => {
   const str = String(s).replace(/```json|```/g, '').trim();
   try {
@@ -179,7 +196,7 @@ export async function runAgent({ entities, destination, onStep = () => { } }) {
   return {
     plan: {
       summary: `Taste-matched cultural guide for ${destination}, grounded in Qloo’s taste graph.`,
-      sections,
+      sections : cleanSections(plan.sections, destination),
       tasteDna: tasteDna.length ? tasteDna : undefined,
     },
     evidence,
