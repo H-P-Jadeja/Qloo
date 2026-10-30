@@ -196,7 +196,7 @@ export async function runAgent({ entities, destination, onStep = () => { } }) {
   return {
     plan: {
       summary: `Taste-matched cultural guide for ${destination}, grounded in Qloo’s taste graph.`,
-      sections : cleanSections(plan.sections, destination),
+      sections : cleanSections(sections, destination),
       tasteDna: tasteDna.length ? tasteDna : undefined,
     },
     evidence,
