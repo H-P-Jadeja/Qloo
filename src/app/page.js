@@ -72,7 +72,7 @@ export default function Home() {
 
             <div>
               <Link
-                href="/compare/cnidwx59"
+                href="/compare/mbl4rya2"
                 className="btn btn-primary"
                 style={{
                   background: 'linear-gradient(90deg, #9b51e0 0%, #bf5af2 100%)',

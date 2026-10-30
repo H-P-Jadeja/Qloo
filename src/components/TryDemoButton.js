@@ -13,7 +13,7 @@ export default function TryDemoButton({
   label = '⚡ Try the Demo (Pune → London)',
   style = {},
   className = 'btn btn-primary',
-  targetSlug = 'cnidwx59',
+  targetSlug = 'mbl4rya2',
   targetCity = 'London',
 }) {
   const router = useRouter();

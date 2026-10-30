@@ -57,18 +57,18 @@ export default function AppleHeader() {
         { qlooId: 'ramen', name: 'Ramen', type: 'food' },
       ]));
       sessionStorage.setItem('tasteDestination', 'London');
-      sessionStorage.setItem('lastSlug', 'cnidwx59');
-      setActiveSlug('cnidwx59');
+      sessionStorage.setItem('lastSlug', 'mbl4rya2');
+      setActiveSlug('mbl4rya2');
       setDestination('London');
       window.dispatchEvent(
         new CustomEvent('tasteDestinationChanged', {
-          detail: { destination: 'London', slug: 'cnidwx59' },
+          detail: { destination: 'London', slug: 'mbl4rya2' },
         })
       );
     } catch {
       // ignore
     }
-    router.push('/plan/cnidwx59');
+    router.push('/plan/mbl4rya2');
   }
 
   function handleLockedClick(featureName) {
@@ -134,7 +134,7 @@ export default function AppleHeader() {
                   </Link>
                 ) : (
                   <Link
-                    href="/plan/cnidwx59"
+                    href="/plan/mbl4rya2"
                     title="View demo plan — or generate your own"
                     style={{ color: '#86868b', opacity: 0.7 }}
                     onClick={launchQuickDemo}
@@ -155,7 +155,7 @@ export default function AppleHeader() {
                   </Link>
                 ) : (
                   <Link
-                    href="/compare/cnidwx59"
+                    href="/compare/mbl4rya2"
                     title="View demo LLM comparison — or generate your own"
                     style={{ color: '#86868b', opacity: 0.7 }}
                     onClick={launchQuickDemo}
