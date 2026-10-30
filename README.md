@@ -10,7 +10,7 @@
 When people move to a new city (for example, moving from **Pune to Berlin** or **Toronto to Tokyo**), they leave behind their favorite independent cafes, neighborhood record stores, and underground cinemas. 
 
 Traditional relocation tools and generic LLMs fail:
-- **LLM Hallucinations:** Prompting a generic LLM produces permanently closed venues, invented cafes, or generic tourist traps (e.g. recommending Alexanderplatz or Checkpoint Charlie to an indie cinema fan).
+- **Plain LLMs recommend by popularity, not taste:** A generic LLM suggests well-known places and often just echoes your favorites' names (for example a "Nike Store" for a Nike fan or a "Coldplay Tribute Night" for a Coldplay fan), with no tie to your taste signals or to the city's local scene.
 - **Domain Silos:** Standard recommendation engines don't connect non-geographic affinities (e.g., loving Radiohead and Blade Runner) with local spatial equivalents (e.g., finding the exact vinyl-listening bar and neo-noir ramen counter in Kreuzberg).
 
 ## 💡 The Solution

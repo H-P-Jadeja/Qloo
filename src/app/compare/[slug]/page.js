@@ -55,7 +55,7 @@ export default async function Compare({ params }) {
 
         <p className="hero-sub" style={{ fontSize: 16, maxWidth: 850 }}>
           Side-by-side transparency: see how Qloo grounds recommendations in verified cultural coordinates,
-          compared to ungrounded LLMs that hallucinate fictitious venues, tourist traps, and unverified guesses.
+          compared to a plain LLM that picks by general popularity and echoes your inputs.
         </p>
       </div>
 

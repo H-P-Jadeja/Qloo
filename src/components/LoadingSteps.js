@@ -2,11 +2,11 @@
 import { useState, useEffect } from 'react';
 
 const TASTE_INSIGHTS = [
-  '⚡ Zero Generic Hallucinations: Every recommendation is grounded against Qloo’s active 750M+ cultural entity graph.',
+  '⚡ Grounded picks: Every recommendation is returned by Qloo’s taste graph, not guessed by the AI.',
   '🎧 Cross-Domain Affinity: Your music and cinema favorites directly inform which dining spots and neighborhoods match your lifestyle.',
   '📍 Map Pins: Places with Qloo location data are plotted on the map, with one-click Google Maps links.',
   '🌐 Subculture Mapping: Translating your local neighborhood vibe into its true cultural counterpart in your destination.',
-  '⚖️ Grounded vs Hallucination: Comparing Qloo’s verified physical venues against generic LLM approximations.',
+  '⚖️ Taste vs popularity: Comparing Qloo’s taste-matched venues with what a plain LLM suggests.',
 ];
 
 export default function LoadingSteps({ steps = [], destination = '', entities = [] }) {
