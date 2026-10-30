@@ -56,13 +56,13 @@ export default function AppleHeader() {
         { qlooId: 'daft_punk', name: 'Daft Punk', type: 'music' },
         { qlooId: 'ramen', name: 'Ramen', type: 'food' },
       ]));
-      sessionStorage.setItem('tasteDestination', 'Berlin');
+      sessionStorage.setItem('tasteDestination', 'London');
       sessionStorage.setItem('lastSlug', 'cnidwx59');
       setActiveSlug('cnidwx59');
-      setDestination('Berlin');
+      setDestination('London');
       window.dispatchEvent(
         new CustomEvent('tasteDestinationChanged', {
-          detail: { destination: 'Berlin', slug: 'cnidwx59' },
+          detail: { destination: 'London', slug: 'cnidwx59' },
         })
       );
     } catch {
@@ -179,7 +179,7 @@ export default function AppleHeader() {
                 fontSize: 12,
                 cursor: 'pointer',
               }}
-              title="Launch the instant Pune → Berlin demonstration plan"
+              title="Launch the instant Pune → London demonstration plan"
             >
               ⚡ Demo
             </button>

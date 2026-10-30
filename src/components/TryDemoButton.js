@@ -10,11 +10,11 @@ export const DEMO_ENTITIES = [
 ];
 
 export default function TryDemoButton({
-  label = '⚡ Try the Demo (Pune → Berlin)',
+  label = '⚡ Try the Demo (Pune → London)',
   style = {},
   className = 'btn btn-primary',
   targetSlug = 'cnidwx59',
-  targetCity = 'Berlin',
+  targetCity = 'London',
 }) {
   const router = useRouter();
 

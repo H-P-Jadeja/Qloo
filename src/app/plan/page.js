@@ -67,7 +67,7 @@ export default function PlanIndexPage() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <TryDemoButton
-            label="⚡ Try the Demo (Pune → Berlin)"
+            label="⚡ Try the Demo (Pune → London)"
             style={{ width: '100%', padding: '12px 24px', fontSize: 15 }}
           />
           <Link href="/onboarding" className="btn btn-secondary" style={{ padding: '12px 24px', fontSize: 15 }}>

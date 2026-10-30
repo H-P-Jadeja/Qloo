@@ -29,7 +29,7 @@ export default function Onboarding() {
 
   async function demo() {
     setLoadingDemo(true);
-    setMsg('Resolving Pune → Berlin sample affinities from Qloo taste graph...');
+    setMsg('Resolving Pune → London sample affinities from Qloo taste graph...');
     setErr('');
     try {
       const queries = [

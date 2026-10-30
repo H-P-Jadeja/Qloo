@@ -39,7 +39,7 @@ On the `/compare/[slug]` route, TasteTransplant runs a side-by-side benchmark co
 ---
 
 ## 🏆 Accomplishments That We're Proud Of
-- **1-Click Judge Demo:** A bulletproof, pre-cached demo flow (`Pune → Berlin`) that loads in under 1 second without typing.
+- **1-Click Judge Demo:** A bulletproof, pre-cached demo flow (`Pune → London`) that loads in under 1 second without typing.
 - **Sub-30s Run Times:** Parallelized Qloo requests and optimized timeout handling for lightning-fast plan generation.
 - **Full Apple-Inspired UI/UX:** Frosted glass navigation, dark matter aesthetic, interactive Leaflet/Google Maps dual viewer, and live progress radar.
 

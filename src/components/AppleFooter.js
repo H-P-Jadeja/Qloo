@@ -10,7 +10,7 @@ export default function AppleFooter() {
             <ul>
               <li><Link href="/onboarding">Build Taste Profile</Link></li>
               <li><Link href="/destination">Destination Concierge</Link></li>
-              <li><Link href="/plan/cnidwx59">Live Demo (Berlin)</Link></li>
+              <li><Link href="/plan/cnidwx59">Live Demo (London)</Link></li>
               <li><Link href="/compare/cnidwx59">LLM Grounding Benchmark</Link></li>
             </ul>
           </div>

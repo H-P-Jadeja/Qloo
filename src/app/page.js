@@ -23,7 +23,7 @@ export default function Home() {
         {/* Hero Actions: Prominent Try the Demo Button + Custom Build Button */}
         <div className="row" style={{ justifyContent: 'center', gap: 14, flexWrap: 'wrap' }}>
           <TryDemoButton
-            label="⚡ Try the Demo (Pune → Berlin)"
+            label="⚡ Try the Demo (Pune → London)"
             style={{
               padding: '14px 32px',
               fontSize: 16,
@@ -82,7 +82,7 @@ export default function Home() {
                   boxShadow: '0 4px 20px rgba(191, 90, 242, 0.4)',
                 }}
               >
-                <span>View Live Benchmark (Berlin)</span>
+                <span>View Live Benchmark (London)</span>
                 <span>→</span>
               </Link>
             </div>
@@ -182,7 +182,7 @@ export default function Home() {
             <h3 style={{ fontSize: 20, marginBottom: 8 }}>Cross-Domain Intelligence</h3>
             <p className="sub">
               Love Radiohead and Blade Runner? Qloo maps non-geographic affinities (music, cinema, fashion)
-              into spatial cultural equivalents across Berlin, Tokyo, or Toronto.
+              into spatial cultural equivalents across London, Tokyo, or Toronto.
             </p>
           </div>
 
@@ -216,7 +216,7 @@ export default function Home() {
         </p>
         <div className="row" style={{ justifyContent: 'center', gap: 14 }}>
           <TryDemoButton
-            label="⚡ Try the Demo (Pune → Berlin)"
+            label="⚡ Try the Demo (Pune → London)"
             style={{ padding: '14px 34px', fontSize: 16 }}
           />
           <Link href="/onboarding" className="btn btn-secondary" style={{ padding: '14px 30px', fontSize: 16 }}>

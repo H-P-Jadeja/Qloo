@@ -41,11 +41,11 @@ TasteTransplant leverages the Qloo API deeply across several endpoints:
 
 ---
 
-## ⚡ The Live Demo (Pune → Berlin in 1 Click)
+## ⚡ The Live Demo (Pune → London in 1 Click)
 Judges can evaluate the entire end-to-end pipeline with zero typing:
-- Click **"⚡ Try the Demo (Pune → Berlin)"** on the landing page or header navigation.
-- Instantly loads the demo profile (*Radiohead, Blade Runner, Studio Ghibli, Daft Punk, Ramen*) against Berlin.
-- Opens the verified Berlin Taste Map with live Leaflet/Google Maps pinpoints, Taste DNA tags, API evidence drawers, and LLM comparison benchmark.
+- Click **"⚡ Try the Demo (Pune → London)"** on the landing page or header navigation.
+- Instantly loads the demo profile (*Radiohead, Blade Runner, Studio Ghibli, Daft Punk, Ramen*) against London.
+- Opens the verified London Taste Map with live Leaflet/Google Maps pinpoints, Taste DNA tags, API evidence drawers, and LLM comparison benchmark.
 
 ---
 
