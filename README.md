@@ -18,7 +18,9 @@ Traditional relocation tools and generic LLMs fail:
 1. **Curate Your Taste Fingerprint:** Select your favorite music artists, films, dining preferences, and cultural icons.
 2. **Translate Across Domains with Qloo:** Qloo's Cultural Taste Graph maps your multidimensional affinities to verified real-world places, neighborhoods, and venues in your destination.
 3. **Strict Grounding Guarantee:** Every single venue is returned directly by Qloo's API. The AI language model *only* writes the explanatory narrative.
-4. **Side-by-Side LLM Benchmark:** Transparently compares Qloo's verified venues against plain LLM guesses, demonstrating that **8 of 10 LLM suggestions** fail cultural verification.
+4. **Side-by-Side LLM Benchmark:** In our benchmark run (Pune → London), 10 of 10 plain-LLM suggestions could not be matched to Qloo's taste-matched results for the same profile.
+
+For example, the plain LLM answered a fan of Blade Runner 2049 with a cocktail bar "perfect for fans of Blade Runner," and a fan of Nike with the Nike Town store. It matched names, not taste.
 
 ---
 

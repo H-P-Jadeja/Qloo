@@ -33,7 +33,7 @@ Built using **Next.js 14 App Router**, **Prisma ORM**, **Neon Serverless Postgre
 ## ⚖️ What a Plain LLM Could Not Do (The Compare Benchmark)
 On the `/compare/[slug]` route, TasteTransplant runs a side-by-side benchmark comparing Qloo-grounded picks against a plain LLM given the exact same prompt:
 - **Popularity, not taste:** The plain LLM picks well-known venues and echoes the names of your favorites. Many of its suggestions may exist, but none is tied to your taste signals, and we show how few of them Qloo's taste graph can match for the same profile.
-- **The Numbers:** In benchmark runs, 8 of 10 plain LLM recommendations fail to match verified cultural entities in Qloo’s taste graph for the user’s profile. Check the live compare page for your own run’s exact number.
+- **The Numbers:** In our benchmark run (Pune → London), 10 of 10 plain-LLM suggestions could not be matched to Qloo's taste-matched results for the same profile.
 - **Zero Evidence:** Plain LLMs cannot cite why an affinity was transferred. Qloo proves the connection with verifiable signals and shared tags.
 
 ---
